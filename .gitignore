@@ -2,3 +2,5 @@ Kendall-new.for
 Kendall-new.for
 Kendall-new
 data/
+tmp/
+__pycache__/

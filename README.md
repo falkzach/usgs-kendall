@@ -33,10 +33,10 @@ You must compile the fortran code for unix as the USGS provides only an exe and 
 make
 ```
 
-If your environment lacks the fortran compiler it can be installed with ```apt-get```.
+If your environment lacks make or the fortran compiler they can be installed with ```apt-get```.
 
 ```
-sudo apt-get install gfortran
+sudo apt-get install make gfortran
 ```
 
 ## Usage

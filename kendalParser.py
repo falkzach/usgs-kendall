@@ -34,7 +34,7 @@ class kendalParser:
                 self.z = match[0]
                 continue
 
-            #NOTE: must check for p_adjust first and continue
+            #NOTE: must check for p_adjust first and continue, refine regexes
             match = re.findall(self.p_adjusted_re, line)
             if(match):
                 self.p_adjusted = match[0]
@@ -51,7 +51,7 @@ class kendalParser:
                 self.trend_equation_intercept = match[0][1]
                 continue
 
-    def getData(self):
+    def get_data(self):
         return vars(self)
 
 
@@ -59,5 +59,5 @@ if __name__ == "__main__":
     input_path = './data/Output_example1.txt'
     parser = kendalParser(input_path)
     parser.parse()
-    data = parser.getData()
+    data = parser.get_data()
     print(data)

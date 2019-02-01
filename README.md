@@ -27,16 +27,32 @@ wget https://pubs.usgs.gov/sir/2005/5275/downloads/Kendall-new.for
 ```
 
 ### Compiling the USGS Mann-Kendall Fortran Code
-You must compile the fortran code for unix as the USGS provides only an exe and the source. A Makefile is provided for this.
-
-```
-make
-```
-
 If your environment lacks make or the fortran compiler they can be installed with ```apt-get```.
 
 ```
 sudo apt-get install make gfortran
+```
+
+Call ```make``` to compile the USGS Kendal fortran code
+```
+make
+```
+
+### Project Organization
+
+```
+usgs-kendall
+├── data    - place datasets here
+├── results - aggregated experiment results
+├── tmp     - temporary intermediate date files and unparsed results, 
+├── ...
+├── README.md
+```
+
+the tmp directory may consume large amounts of disk space if many datasets are run; they must be deleted manually.
+
+```
+rm tmp/*
 ```
 
 ## Usage

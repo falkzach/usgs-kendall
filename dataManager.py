@@ -4,7 +4,6 @@ import pandas as pd
 class NADP_NTN_DataManager:
     """A data manager for the National Atmospheric Deposition Program (NADP) National Trends Network (NTN) monthly data
     http://nadp.slh.wisc.edu/data/NTN/ntnAllsites.aspx
-
     """
 
     # TODO: write complete wrapper for these parameters, extract to kendalWrapper?

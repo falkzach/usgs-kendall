@@ -1,3 +1,4 @@
+import os
 import time
 
 import pandas as pd
@@ -30,7 +31,7 @@ if __name__ == "__main__":
 
     dm = NADP_NTN_DataManager(input_path)
     df = pd.DataFrame(columns=output_columns)
-    df_filtered = pd.DataFrame(columns=output_columns)
+    # df_filtered = pd.DataFrame(columns=output_columns)
 
     for site_id in site_ids:
         for param in params:
@@ -54,6 +55,5 @@ if __name__ == "__main__":
             results['param'] = param
             df = df.append(results, ignore_index=True)
 
-    # TODO: change output path to include filtered
     df.to_csv('{}/{}_{}'.format(output_directory, timestamp, output_file))
-    df_filtered.to_csv('{}/{}_filtered_{}'.format(output_directory, timestamp, output_file))
+    # df_filtered.to_csv('{}/{}_filtered_{}'.format(output_directory, timestamp, output_file))

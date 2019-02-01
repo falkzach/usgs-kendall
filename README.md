@@ -33,18 +33,19 @@ If your environment lacks make or the fortran compiler they can be installed wit
 sudo apt-get install make gfortran
 ```
 
-Call ```make``` to compile the USGS Kendal fortran code
+Call ```make``` to compile the USGS Kendal fortran code.
 ```
 make
 ```
 
 ### Project Organization
-
 ```
 usgs-kendall
 ├── data    - place datasets here
 ├── results - aggregated experiment results
-├── tmp     - temporary intermediate date files and unparsed results, 
+├── tmp     - temporary intermediate date files and unparsed results
+├── ...
+├── main.py - the main experiments file, configure datasets, sites, and parameters
 ├── ...
 ├── README.md
 ```
@@ -56,7 +57,7 @@ rm tmp/*
 ```
 
 ## Usage
-Experiment parameters are defined in ```main.py```.
+Experiment datasets, parameters, etc are defined in ```main.py```.
 
 ```
 python3 main.py

@@ -40,6 +40,11 @@ sudo apt-get install make gfortran
 ```
 
 ## Usage
+Experiment parameters are defined in ```main.py```.
+
+```
+python3 main.py
+```
 
 ## License
  

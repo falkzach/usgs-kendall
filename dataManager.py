@@ -37,14 +37,12 @@ class NADP_NTN_DataManager:
         self.subset = self.df[(self.df['siteID'] == site_id)]     # for only these sites
         self.subset = self.subset[self.output_cols]               # only keep these columns
 
+    # TODO: operater as parameter?
     def filter_subset_by_parameter_threshold(self, parmater, threshold):
         self.subset = self.subset[(self.subset[parameter] >= threshold)]
 
     def write_subset_to_experiment_file(self, output_directory='./', prefix='', extension='txt'):
         output_directory = output_directory if output_directory.endswith('/') else output_directory + '/' # ensure directory ends with /
-        # ensure the output directory exists
-        if not os.path.exists(output_directory):
-            os.makedirs(output_directory)
         extension = extension[1:] if extension.startswith('.') else extension # prune leading '.' from extensions
 
         self.output = '{}{}_{}_{}.{}'.format(output_directory, prefix, self.site_id, self.param, extension)
@@ -53,10 +51,11 @@ class NADP_NTN_DataManager:
         f.close()
         self.subset.to_csv(self.output, header=False, index=False, mode='a+')
 
+        # set result path for the subset
         self.generate_result_path()
 
 if __name__ == "__main__":
     input_path = './data/NTN-All-m.csv'
     dm = NADP_NTN_DataManager(input_path)
     dm.generate_subset_for_site_and_param('WY08', 'Ca')
-    dm.write_subset_to_experiment_file(output_directory='./tmp')
+    dm.write_subset_to_experiment_file()

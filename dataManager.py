@@ -22,11 +22,13 @@ class NADP_NTN_DataManager:
     def get_output(self):
         return self.output
 
+    def get_results_output(self):
+        return self.results_output
+
     def generate_result_path(self, prefix='kendal'):
         path = os.path.dirname(self.output)
         fname = os.path.basename(self.output)
         self.results_output = '{}/{}_{}'.format(path, prefix, fname)
-        return self.results_output
 
     def generate_subset_for_site_and_param(self, site_id, param):
         self.site_id = site_id
@@ -50,6 +52,8 @@ class NADP_NTN_DataManager:
         f.write('{}{}'.format(self.output_firstline, '\n'))
         f.close()
         self.subset.to_csv(self.output, header=False, index=False, mode='a+')
+
+        self.generate_result_path()
 
 if __name__ == "__main__":
     input_path = './data/NTN-All-m.csv'

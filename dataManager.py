@@ -36,9 +36,21 @@ class NADP_NTN_DataManager:
         self.subset = self.df[(self.df['siteID'] == site_id)]     # for only these sites
         self.subset = self.subset[self.output_cols]               # only keep these columns
 
-    # TODO: operater as parameter?
-    def filter_subset_by_parameter_threshold(self, parmater, threshold):
-        self.subset = self.subset[(self.subset[parameter] >= threshold)]
+    def generate_filtered_subset_for_site_and_param(self, site_id, param, criterium = {}):
+        self.site_id = site_id
+        self.param = param
+        self.output_cols[self.output_col_param_index] = param
+
+        filter = 'siteID == @site_id'
+        for criteria, threshold in criterium.items():
+            # TODO: operater as parameter?
+            filter = '{} and {} >= {}'.format(filter, criteria, threshold)
+
+        self.subset = self.df.query(filter)                     # with the filters
+        self.subset = self.subset[self.output_cols]             # only keep these columns
+
+    # def filter_subset_by_parameter_threshold(self, paramater, threshold):
+    #     self.subset = self.subset[(self.subset[paramater] >= threshold)]
 
     def write_subset_to_experiment_file(self, output_directory='./', prefix='', extension='txt'):
         output_directory = output_directory if output_directory.endswith('/') else output_directory + '/' # ensure directory ends with /

@@ -31,12 +31,12 @@ if __name__ == "__main__":
 
     dm = NADP_NTN_DataManager(input_path)
     df = pd.DataFrame(columns=output_columns)
-    # df_filtered = pd.DataFrame(columns=output_columns)
+    df_filtered = pd.DataFrame(columns=output_columns)
 
     for site_id in site_ids:
         for param in params:
+            # generate and store a subset of the dataset
             dm.generate_subset_for_site_and_param(site_id, param)
-            # TODO: apply filter to subset
             dm.write_subset_to_experiment_file(temp_directory, timestamp, 'txt')
 
             # run the Seasonal Kendall
@@ -55,5 +55,30 @@ if __name__ == "__main__":
             results['param'] = param
             df = df.append(results, ignore_index=True)
 
+            #
+            # repeat with filtered data
+            #
+
+            # generate and store a filtered set of the dataset
+            dm.generate_filtered_subset_for_site_and_param(site_id, param, filter_param_to_threshold)
+            dm.write_subset_to_experiment_file(temp_directory, '{}_{}'.format(timestamp, 'filtered'), 'txt')
+
+            # run the Seasonal Kendall
+            process = KendallWrapper(dm.get_output(), dm.get_results_output())
+            try:
+                # TODO: results file written out but exceptions thrown, catch them and do nothing
+                process.run()
+            except:
+                pass
+
+            # parse results and add to dataframe
+            parser = kendalParser(dm.get_results_output())
+            parser.parse()
+            results = parser.get_data()
+            results['site_id'] = site_id
+            results['param'] = param
+            df_filtered = df_filtered.append(results, ignore_index=True)
+
+    # write results out to csv
     df.to_csv('{}/{}_{}'.format(output_directory, timestamp, output_file))
-    # df_filtered.to_csv('{}/{}_filtered_{}'.format(output_directory, timestamp, output_file))
+    df_filtered.to_csv('{}/{}_filtered_{}'.format(output_directory, timestamp, output_file))

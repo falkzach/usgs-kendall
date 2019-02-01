@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 class NADP_NTN_DataManager:
@@ -10,8 +11,8 @@ class NADP_NTN_DataManager:
     test = 2
     smoothing = 1
     output_firstline = '{} {}'.format(test, smoothing)
-    output_cols = ['siteID', 'yr', 'month', '','ppt', ]
-    output_col_param_index = 3
+    output_cols = ['yr', 'month', '','ppt', ]
+    output_col_param_index = 2
 
 
     def __init__(self, input_path):
@@ -22,18 +23,28 @@ class NADP_NTN_DataManager:
         return self.output
 
     def generate_result_path(self, prefix='kendal'):
-        return '{}_{}'.format(prefix, self.output)
+        path = os.path.dirname(self.output)
+        fname = os.path.basename(self.output)
+        self.results_output = '{}/{}_{}'.format(path, prefix, fname)
+        return self.results_output
 
     def generate_subset_for_site_and_param(self, site_id, param):
         self.site_id = site_id
         self.param = param
         self.output_cols[self.output_col_param_index] = param
         self.subset = self.df[(self.df['siteID'] == site_id)]     # for only these sites
-        self.subset = self.subset[self.output_cols]                    # only keep these columns
+        self.subset = self.subset[self.output_cols]               # only keep these columns
+
+    def filter_subset_by_parameter_threshold(self, parmater, threshold):
+        self.subset = self.subset[(self.subset[parameter] >= threshold)]
 
     def write_subset_to_experiment_file(self, output_directory='./', prefix='', extension='txt'):
-        output_directory = output_directory if output_directory.endswith('/') else output_directory + '/'
-        extension = extension[1:] if extension.startswith('.') else extension
+        output_directory = output_directory if output_directory.endswith('/') else output_directory + '/' # ensure directory ends with /
+        # ensure the output directory exists
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory)
+        extension = extension[1:] if extension.startswith('.') else extension # prune leading '.' from extensions
+
         self.output = '{}{}_{}_{}.{}'.format(output_directory, prefix, self.site_id, self.param, extension)
         f = open(self.output, 'w')
         f.write('{}{}'.format(self.output_firstline, '\n'))
@@ -41,8 +52,7 @@ class NADP_NTN_DataManager:
         self.subset.to_csv(self.output, header=False, index=False, mode='a+')
 
 if __name__ == "__main__":
-    input_path = './data/Master-NTN-monthly.csv'
-
+    input_path = './data/NTN-All-m.csv'
     dm = NADP_NTN_DataManager(input_path)
-    dm.generate_subset_for_param('WY08', 'Ca')
-    dm.write_subset_toexperiment_file(output_directory='./tmp')
+    dm.generate_subset_for_site_and_param('WY08', 'Ca')
+    dm.write_subset_to_experiment_file(output_directory='./tmp')

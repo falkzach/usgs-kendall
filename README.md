@@ -16,7 +16,7 @@ This tool will only function in a unix environment as pexpect relies on PTYs.
 If your environment lacks python3, pandas, or pexpect, they can be installed with ```apt-get```.
 
 ```
-sudo apt-get install python3 python3-panda python3-pexpect
+sudo apt-get install python3 python3-pandas python3-pexpect
 ```
 
 ### Acquiring the USGS Mann-Kendall Fortran Code
